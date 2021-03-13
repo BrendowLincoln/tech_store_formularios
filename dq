@@ -1,0 +1,59 @@
+[33mcommit e8f178dc530c33bac603e268942e356a2526596d[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m)[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Sat Mar 13 13:41:45 2021 -0300
+
+    Criando um novo ChangeNotifierProvider para envolver o ProductItem e fazer a mudança de favorite
+
+[33mcommit cc15238ef2e7cc0d4e25fbe9bac902e59944ef9e[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Sat Mar 13 13:18:53 2021 -0300
+
+    Extraindo o product grid para um widget separado
+
+[33mcommit a5436d3068db526fe59c7531f89afb8051dff575[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Sat Mar 13 13:11:13 2021 -0300
+
+    Atribuindo o provider e changenotifer no ponto inicial da aplicação para compartilhar a lista de products
+
+[33mcommit d446a92d2649c8da3bfbe9102da79abe5e85957a[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Sat Mar 13 01:33:05 2021 -0300
+
+    Adicionando código demosntrativo para entender como funciona o InheritedWidget
+
+[33mcommit 78a0c71c19c62b207ba37681f711b588eb98a692[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Sat Mar 13 01:05:18 2021 -0300
+
+    Fazendo a navegação por rotas nomeadas para a pagian de ProductDetail
+
+[33mcommit 41eaae1d16123db04586b0e89a762c555d7288dd[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Sat Mar 13 00:45:02 2021 -0300
+
+    Personalizando os estilos de fonte e cores do aplicativo
+
+[33mcommit d7348b220de78121602aee9d1cb52d05dc5a752f[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Sat Mar 13 00:03:51 2021 -0300
+
+    Estruturando os GridTile da estrutura de Grid.builder
+
+[33mcommit 90808e35a5849a3809957ca2b680d6b3a976b2f6[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Fri Mar 12 23:36:31 2021 -0300
+
+    Montando esqueleto da tela de grid dos produtos e integrando com os dados mocados.
+
+[33mcommit a4c7a0f8d85e27f5cfc5166421a3744669dd751a[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Fri Mar 12 22:56:08 2021 -0300
+
+    Criando modelo inicial tela de produtos de o model para a classe Product
+
+[33mcommit 28eed10aba69a5d8dbcdfe0b59bde219146318c1[m
+Author: BrendowLincoln <linconlbrendow@gmail.com>
+Date:   Fri Mar 12 21:56:49 2021 -0300
+
+    First commit
