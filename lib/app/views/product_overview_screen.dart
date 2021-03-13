@@ -11,6 +11,7 @@ class ProductOverviewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tech Store'),
+        centerTitle: true,
       ),
       body: GridView.builder(
         padding: EdgeInsets.all(10),
@@ -21,7 +22,9 @@ class ProductOverviewScreen extends StatelessWidget {
           crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
-        itemBuilder: (context, index) => ProductItem(product: loadedProducts[index],),
+        itemBuilder: (context, index) => ProductItem(
+          product: loadedProducts[index],
+        ),
       ),
     );
   }
