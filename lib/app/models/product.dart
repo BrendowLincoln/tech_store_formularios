@@ -13,6 +13,7 @@ class Product {
     @required this.title,
     @required this.description,
     @required this.price,
-    this.imageUrl = false,
+    @required this.imageUrl,
+    this.isFavorite = false,
   });
 }
