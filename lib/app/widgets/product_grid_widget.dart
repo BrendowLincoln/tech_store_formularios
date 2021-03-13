@@ -7,8 +7,8 @@ import 'package:shop/app/widgets/product_item.dart';
 class ProductGridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    final ProductsProvider productsProvider = Provider.of<ProductsProvider>(context);
+    final ProductsProvider productsProvider =
+        Provider.of<ProductsProvider>(context);
     final List<ProductModel> products = productsProvider.items;
 
     return GridView.builder(
@@ -20,8 +20,9 @@ class ProductGridWidget extends StatelessWidget {
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
       ),
-      itemBuilder: (context, index) => ProductItem(
-        product: products[index],
+      itemBuilder: (context, index) => ChangeNotifierProvider(
+        create: (context) => products[index],
+          child: ProductItem()
       ),
     );
   }
