@@ -16,36 +16,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       appBar: AppBar(
         title: Text(product.title),
       ),
-      body: Center(
-
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(CounterProvider.of(context).state.value.toString()),
-            SizedBox(height: 20,),
-            ElevatedButton(
-              child: Text("+"),
-              onPressed: () {
-                setState(() {
-                  CounterProvider.of(context).state.increment();
-                  print(CounterProvider.of(context).state.value);
-                });
-              },
-            ),
-            SizedBox(height: 20,),
-            ElevatedButton(
-              child: Text("-"),
-              onPressed: () {
-                setState(() {
-                  if(CounterProvider.of(context).state.value > 0)
-                  CounterProvider.of(context).state.decremente();
-                  print(CounterProvider.of(context).state.value);
-                });
-              },
-            )
-          ],
-        ),
-      ),
+      body: Center(),
     );
   }
 }

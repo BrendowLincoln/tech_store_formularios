@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:shop/app/data/dummy_data.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/app/models/product.dart';
+import 'package:shop/app/providers/products_provider.dart';
 import 'package:shop/app/widgets/product_item.dart';
 
 class ProductOverviewScreen extends StatelessWidget {
-  final List<Product> loadedProducts = DUMMY_PRODUCTS;
 
   @override
   Widget build(BuildContext context) {
+
+    final ProductsProvider productsProvider = Provider.of<ProductsProvider>(context);
+    final List<Product> products = productsProvider.items;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Tech Store'),
@@ -15,7 +19,7 @@ class ProductOverviewScreen extends StatelessWidget {
       ),
       body: GridView.builder(
         padding: EdgeInsets.all(10),
-        itemCount: loadedProducts.length,
+        itemCount: products.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 3 / 2,
@@ -23,7 +27,7 @@ class ProductOverviewScreen extends StatelessWidget {
           mainAxisSpacing: 10,
         ),
         itemBuilder: (context, index) => ProductItem(
-          product: loadedProducts[index],
+          product: products[index],
         ),
       ),
     );
