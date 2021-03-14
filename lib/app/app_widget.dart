@@ -23,7 +23,7 @@ class AppWidget extends StatelessWidget {
         title: 'Tech Store - Seus gadgets preferidos estão aqui!',
         theme: ThemeData(
           primarySwatch: Colors.indigo,
-          accentColor: Colors.cyan[200],
+          accentColor: Color.fromRGBO(173, 36, 68, 1),
           fontFamily: 'Lato',
         ),
         home: ProductOverviewScreen(),
