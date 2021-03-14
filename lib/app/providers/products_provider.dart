@@ -6,8 +6,11 @@ class ProductsProvider with ChangeNotifier {
 
   List<ProductModel> _items = DUMMY_PRODUCTS;
 
+  List<ProductModel> get items => [ ..._items];
 
-  List<ProductModel> get items =>[ ..._items ];
+  List<ProductModel> get favoriteItems {
+    return _items.where((prod) => prod.isFavorite).toList();
+  }
 
   void addProduct(ProductModel product) {
     _items.add(product);
@@ -15,3 +18,16 @@ class ProductsProvider with ChangeNotifier {
   }
 
 }
+
+// bool _showFavoriteOnly = false;
+
+
+// void showFavoriteOnly() {
+//   _showFavoriteOnly = true;
+//   notifyListeners();
+// }
+//
+// void showAll() {
+//   _showFavoriteOnly = false;
+//   notifyListeners();
+// }
