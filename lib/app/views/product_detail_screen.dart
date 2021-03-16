@@ -43,7 +43,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 textAlign: TextAlign.center,
               ),
             )
-
           ],
         ),
       ),

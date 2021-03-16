@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/app/providers/cart_provider.dart';
+import 'package:shop/app/providers/orders_provider.dart';
 import 'package:shop/app/providers/products_provider.dart';
 import 'package:shop/app/utils/app_routes.dart';
 import 'package:shop/app/views/cart_screen.dart';
@@ -17,6 +18,9 @@ class AppWidget extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => Cart(),
+        ),
+        ChangeNotifierProvider(
+            create: (context) => Orders(),
         )
       ],
       child: MaterialApp(
