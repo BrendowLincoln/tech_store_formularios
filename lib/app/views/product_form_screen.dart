@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:shop/app/providers/product_provider.dart';
 
 class ProductFormScreen extends StatefulWidget {
   @override
@@ -6,21 +9,38 @@ class ProductFormScreen extends StatefulWidget {
 }
 
 class _ProductFormScreenState extends State<ProductFormScreen> {
-
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
   final _imageUrlFocusNode = FocusNode();
   final _imageUrlController = TextEditingController();
 
+  final _form = GlobalKey<FormState>();
+  final _formData = Map<String, Object>();
+
   @override
   void initState() {
     super.initState();
     _imageUrlFocusNode.addListener(_updateImage);
-
   }
 
   void _updateImage() {
     setState(() {});
+  }
+
+  void _saveForm() {
+    _form.currentState.save();
+
+    final newProduct = ProductProvider(
+      id: Random().nextDouble().toStringAsFixed(2).toString(),
+      title: _formData['title'],
+      description: _formData['description'],
+      price: _formData['price'],
+      imageUrl: _formData['imageUrl'],
+    );
+    print(newProduct.id);
+    print(newProduct.title);
+    print(newProduct.price);
+    print(newProduct.description);
   }
 
   @override
@@ -32,17 +52,22 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _imageUrlFocusNode.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Formulário Produto"),
-        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: _saveForm,
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: Form(
+          key: _form,
           child: ListView(
             children: [
               TextFormField(
@@ -53,6 +78,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
                 },
+                onSaved: (value) => _formData['title'] = value,
               ),
               TextFormField(
                 focusNode: _priceFocusNode,
@@ -64,6 +90,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_descriptionFocusNode);
                 },
+                onSaved: (value) => _formData['price'] = double.parse(value),
               ),
               TextFormField(
                 focusNode: _descriptionFocusNode,
@@ -72,6 +99,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 ),
                 maxLines: 3,
                 keyboardType: TextInputType.multiline,
+                onSaved: (value) => _formData['description'] = value,
+
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -85,6 +114,10 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       ),
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
+                      onSaved: (value) => _formData['imageUrl'] = value,
+                      onFieldSubmitted: (_) {
+                        _saveForm();
+                      },
                     ),
                   ),
                   Container(
@@ -99,8 +132,8 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     ),
                     alignment: Alignment.center,
                     child: _imageUrlController.text.isEmpty
-                    ? Text('Informe a URL')
-                    : FittedBox(
+                        ? Text('Informe a URL')
+                        : FittedBox(
                       child: Image.network(
                         _imageUrlController.text,
                         fit: BoxFit.cover,
@@ -109,7 +142,6 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   )
                 ],
               )
-
             ],
           ),
         ),
