@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:shop/app/providers/cart_provider.dart';
 
 class CartItemWidget extends StatelessWidget {
-
   final CartItem cartItem;
 
   const CartItemWidget({this.cartItem});
@@ -28,14 +27,35 @@ class CartItemWidget extends StatelessWidget {
         ),
       ),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (_) {
+        return showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text("Tem certeza?"),
+            content: Text("Quer remover o item do carrinho?"),
+            actions: <Widget> [
+              TextButton(
+                child: Text("Não"),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              TextButton(
+                child: Text("Sim"),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              )
+            ]
+          ),
+        );
+      },
       onDismissed: (_) {
-        Provider.of<Cart>(context, listen: false).removeItem(cartItem.productId);
+        Provider.of<Cart>(context, listen: false)
+            .removeItem(cartItem.productId);
       },
       child: Card(
-        margin: EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 4
-        ),
+        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 4),
         child: Padding(
           padding: EdgeInsets.all(8),
           child: ListTile(
