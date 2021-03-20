@@ -31,7 +31,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     _form.currentState.save();
 
     final newProduct = ProductProvider(
-      id: Random().nextDouble().toStringAsFixed(2).toString(),
+      id: Random().nextDouble().toStringAsFixed(3).toString(),
       title: _formData['title'],
       description: _formData['description'],
       price: _formData['price'],
