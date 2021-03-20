@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/app/providers/products_provider.dart';
+import 'package:shop/app/utils/app_routes.dart';
 import 'package:shop/app/widgets/app_drawer.dart';
 import 'package:shop/app/widgets/product_item.dart';
 
@@ -10,10 +11,19 @@ class ProductManagementScreen extends StatelessWidget {
     final productsData = Provider.of<ProductsProvider>(context);
     final products = productsData.items;
 
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Gerenciar de Produtos")
+        title: Text("Gerenciar de Produtos"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Navigator.of(context).pushNamed(
+                AppRoutes.PRODUCTS_FORM
+              );
+            },
+          ),
+        ],
       ),
       drawer: AppDrawer(),
       body: Padding(
@@ -22,7 +32,9 @@ class ProductManagementScreen extends StatelessWidget {
           itemCount: productsData.itemsCount,
           itemBuilder: (context, index) => Column(
             children: [
-              ProductItem(product: products[index],),
+              ProductItem(
+                product: products[index],
+              ),
               Divider(),
             ],
           ),
