@@ -4,7 +4,7 @@ import 'package:shop/app/providers/cart_provider.dart';
 import 'package:shop/app/providers/product_provider.dart';
 import 'package:shop/app/utils/app_routes.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
