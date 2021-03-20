@@ -13,7 +13,21 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
         title: Text("Formulário Produto"),
         centerTitle: true,
       ),
-      body: Container(),
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Form(
+          child: ListView(
+            children: [
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Título',
+                ),
+                textInputAction: TextInputAction.next,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
