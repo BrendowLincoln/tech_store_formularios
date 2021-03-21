@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/app/providers/product_provider.dart';
+import 'package:shop/app/providers/products_provider.dart';
 
 class ProductFormScreen extends StatefulWidget {
   @override
@@ -17,24 +19,56 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   final _form = GlobalKey<FormState>();
   final _formData = Map<String, Object>();
 
+  String url = "";
+
+
   @override
   void initState() {
     super.initState();
     _imageUrlFocusNode.addListener(_updateImage);
   }
 
-  void _updateImage() {
-    if(isValidImageUrl(_imageUrlController.text)) {
-      setState(() {});
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if(_formData.isEmpty) {
+      final product = ModalRoute.of(context).settings.arguments as ProductProvider;
+
+      if(product != null) {
+        _formData['id'] = product.id;
+        _formData['title'] = product.title;
+        _formData['description'] = product.description;
+        _formData['price'] = product.price;
+        _formData['imageUrl'] = product.imageUrl;
+
+        _imageUrlController.text = _formData['imageUrl'];
+      } else {
+        _formData['price'] = '';
+      }
     }
   }
 
+  void _updateImage() {
+
+    print(isValidImageUrl(url));
+
+    if(isValidImageUrl(url)) {
+
+    }
+    setState(() {});
+
+
+  }
+
   bool isValidImageUrl(String url) {
-    bool startWithHttp = url.toLowerCase().startsWith('http://');
-    bool startWithHttps = url.toLowerCase().startsWith('https://');
-    bool endsWithPng = url.toLowerCase().startsWith('.png');
-    bool endsWithJpg = url.toLowerCase().startsWith('.jpg');
-    bool endsWithJpeg = url.toLowerCase().startsWith('.jpeg');
+    bool startWithHttp = url.trim().toLowerCase().startsWith('http://');
+    bool startWithHttps = url.trim().toLowerCase().startsWith('https://');
+    bool endsWithPng = url.trim().toLowerCase().endsWith('.png');
+    bool endsWithJpg = url.trim().toLowerCase().endsWith('.jpg');
+    bool endsWithJpeg = url.trim().toLowerCase().endsWith('.jpeg');
+
+    print("$startWithHttp | $startWithHttps | $endsWithPng | $endsWithJpg | $endsWithJpeg");
     return (startWithHttp || startWithHttps) && (endsWithPng || endsWithJpg || endsWithJpeg);
   }
 
@@ -46,17 +80,23 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
     _form.currentState.save();
 
-    final newProduct = ProductProvider(
-      id: Random().nextDouble().toStringAsFixed(3).toString(),
+    final product = ProductProvider(
+      id: _formData['id'],
       title: _formData['title'],
       description: _formData['description'],
       price: _formData['price'],
       imageUrl: _formData['imageUrl'],
     );
-    print(newProduct.id);
-    print(newProduct.title);
-    print(newProduct.price);
-    print(newProduct.description);
+
+    final products = Provider.of<ProductsProvider>(context, listen: false);
+
+    if(_formData['id'] == null) {
+      products.addProduct(product);
+    }else {
+      products.updateProduct(product);
+    }
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -87,6 +127,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _formData['title'],
                 decoration: InputDecoration(
                   labelText: 'Título',
                 ),
@@ -113,6 +154,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 },
               ),
               TextFormField(
+                initialValue: _formData['price'].toString(),
                 focusNode: _priceFocusNode,
                 decoration: InputDecoration(
                   labelText: 'Preço',
@@ -138,6 +180,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
               ),
               TextFormField(
+                initialValue: _formData['description'],
                 focusNode: _descriptionFocusNode,
                 decoration: InputDecoration(
                   labelText: 'Descrição',
@@ -154,7 +197,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                   }
 
                   if(isInvalid) {
-                    return "Informe um título com no mínimo 3 letras!";
+                    return "Informe um título com no mínimo 10 letras!";
                   }
 
                   return null;
@@ -173,12 +216,13 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                       keyboardType: TextInputType.url,
                       textInputAction: TextInputAction.done,
                       onSaved: (value) => _formData['imageUrl'] = value,
+                      onChanged: (value) => url = value,
                       onFieldSubmitted: (_) {
                         _saveForm();
                       },
                       validator: (value) {
                         bool isEmpty = value.trim().isEmpty;
-                        bool isInvalid = !isValidImageUrl(value);
+                        bool isInvalid = !isValidImageUrl(url);
 
                         if(isEmpty || isInvalid) {
                           return "Informe uma URL válida!";
