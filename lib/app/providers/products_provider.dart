@@ -29,15 +29,19 @@ class ProductsProvider with ChangeNotifier {
         'imageUrl' : newProduct.imageUrl,
         'isFavorite' : newProduct.isFavorite,
       }),
-    );
+    ).then((response) {
 
-    _items.add(ProductProvider(
-        id: Random().nextDouble().toString(),
-        title: newProduct.title,
-        price: newProduct.price,
-        description: newProduct.description,
-        imageUrl: newProduct.imageUrl));
-    notifyListeners();
+      print(json.decode(response.body));
+
+      _items.add(ProductProvider(
+          id: json.decode(response.body)['name'],
+          title: newProduct.title,
+          price: newProduct.price,
+          description: newProduct.description,
+          imageUrl: newProduct.imageUrl));
+      notifyListeners();
+    });
+
   }
 
   void updateProduct(ProductProvider product) {
