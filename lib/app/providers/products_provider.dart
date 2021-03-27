@@ -17,10 +17,10 @@ class ProductsProvider with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  void addProduct(ProductProvider newProduct) {
+  Future<void> addProduct(ProductProvider newProduct) {
     Uri url = Uri.parse(
         "https://tech-store-9fbb6-default-rtdb.firebaseio.com/produtos.json");
-    http.post(
+    return http.post(
       url,
       body: json.encode({
         'title' : newProduct.title,
@@ -30,9 +30,6 @@ class ProductsProvider with ChangeNotifier {
         'isFavorite' : newProduct.isFavorite,
       }),
     ).then((response) {
-
-      print(json.decode(response.body));
-
       _items.add(ProductProvider(
           id: json.decode(response.body)['name'],
           title: newProduct.title,
@@ -40,8 +37,8 @@ class ProductsProvider with ChangeNotifier {
           description: newProduct.description,
           imageUrl: newProduct.imageUrl));
       notifyListeners();
-    });
 
+    });
   }
 
   void updateProduct(ProductProvider product) {

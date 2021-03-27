@@ -18,6 +18,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   final _form = GlobalKey<FormState>();
   final _formData = Map<String, Object>();
+  bool _isLoading = false;
 
   String url = "";
 
@@ -88,15 +89,40 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
       imageUrl: _formData['imageUrl'],
     );
 
+    setState(() {
+      _isLoading = true;
+    });
+
     final products = Provider.of<ProductsProvider>(context, listen: false);
 
     if(_formData['id'] == null) {
-      products.addProduct(product);
+      products.addProduct(product)
+        .catchError((error) {
+          return showDialog<Null>(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text("Ocorreu um erro!"),
+                content: Text("Erro na hora de salvar o produto"),
+                actions: [
+                  TextButton(
+                    child: Text("Ok"),
+                    onPressed: () => Navigator.of(context).pop(),
+                  )
+                ],
+              )
+          );
+        })
+        .then((_) {
+          setState(() {
+            _isLoading = false;
+          });
+          Navigator.of(context).pop();
+        });
+
     }else {
       products.updateProduct(product);
+      Navigator.of(context).pop();
     }
-
-    Navigator.of(context).pop();
   }
 
   @override
@@ -120,7 +146,11 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           )
         ],
       ),
-      body: Padding(
+      body: _isLoading
+          ? Center(
+            child: CircularProgressIndicator(),
+          )
+          : Padding(
         padding: const EdgeInsets.all(15.0),
         child: Form(
           key: _form,
