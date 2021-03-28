@@ -1,13 +1,15 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shop/app/data/dummy_data.dart';
 import 'package:shop/app/providers/product_provider.dart';
 
 class ProductsProvider with ChangeNotifier {
-  List<ProductProvider> _items = DUMMY_PRODUCTS;
+
+  final Uri _url = Uri.parse(
+      "https://tech-store-9fbb6-default-rtdb.firebaseio.com/produtos.json");
+
+  List<ProductProvider> _items = [];
 
   List<ProductProvider> get items => [..._items];
 
@@ -17,11 +19,36 @@ class ProductsProvider with ChangeNotifier {
     return _items.where((prod) => prod.isFavorite).toList();
   }
 
-  Future<void> addProduct(ProductProvider newProduct) {
-    Uri url = Uri.parse(
-        "https://tech-store-9fbb6-default-rtdb.firebaseio.com/produtos.json");
-    return http.post(
-      url,
+
+  Future<void> loadProducts() async {
+    final response = await http.get(_url);
+
+    Map<String, dynamic> data = json.decode(response.body);
+    _items.clear();
+    if(data != null) {
+      data.forEach((productId, productData) {
+        _items.add(ProductProvider(
+            id: productId,
+            title: productData["title"],
+            description: productData["description"],
+            price: productData["price"],
+            imageUrl: productData["imageUrl"],
+            isFavorite: productData['isFavorite'])
+
+        );
+      });
+
+      notifyListeners();
+      return Future.value();
+    }
+    }
+
+
+  Future<void> addProduct(ProductProvider newProduct) async {
+
+
+    final response = await http.post(
+      _url,
       body: json.encode({
         'title' : newProduct.title,
         'description' : newProduct.description,
@@ -29,16 +56,15 @@ class ProductsProvider with ChangeNotifier {
         'imageUrl' : newProduct.imageUrl,
         'isFavorite' : newProduct.isFavorite,
       }),
-    ).then((response) {
-      _items.add(ProductProvider(
-          id: json.decode(response.body)['name'],
-          title: newProduct.title,
-          price: newProduct.price,
-          description: newProduct.description,
-          imageUrl: newProduct.imageUrl));
-      notifyListeners();
+    );
 
-    });
+    _items.add(ProductProvider(
+        id: json.decode(response.body)['name'],
+        title: newProduct.title,
+        price: newProduct.price,
+        description: newProduct.description,
+        imageUrl: newProduct.imageUrl));
+    notifyListeners();
   }
 
   void updateProduct(ProductProvider product) {

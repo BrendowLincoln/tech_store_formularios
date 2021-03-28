@@ -73,7 +73,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     return (startWithHttp || startWithHttps) && (endsWithPng || endsWithJpg || endsWithJpeg);
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     var isValid = _form.currentState.validate();
     if(!isValid) {
       return;
@@ -96,28 +96,29 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
     final products = Provider.of<ProductsProvider>(context, listen: false);
 
     if(_formData['id'] == null) {
-      products.addProduct(product)
-        .catchError((error) {
-          return showDialog<Null>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text("Ocorreu um erro!"),
-                content: Text("Erro na hora de salvar o produto"),
-                actions: [
-                  TextButton(
-                    child: Text("Ok"),
-                    onPressed: () => Navigator.of(context).pop(),
-                  )
-                ],
-              )
-          );
-        })
-        .then((_) {
-          setState(() {
-            _isLoading = false;
-          });
-          Navigator.of(context).pop();
+
+      try {
+        await products.addProduct(product);
+      } catch(error) {
+        await showDialog<Null>(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text("Ocorreu um erro!"),
+              content: Text("Erro na hora de salvar o produto"),
+              actions: [
+                TextButton(
+                  child: Text("Ok"),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              ],
+            )
+        );
+      } finally {
+        setState(() {
+          _isLoading = false;
         });
+        Navigator.of(context).pop();
+      }
 
     }else {
       products.updateProduct(product);
