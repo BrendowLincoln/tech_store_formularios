@@ -11,6 +11,10 @@ class ProductManagementScreen extends StatelessWidget {
     final productsData = Provider.of<ProductsProvider>(context);
     final products = productsData.items;
 
+    Future<void> _refreshProducts(BuildContext context) async {
+      await Provider.of<ProductsProvider>(context, listen: false).loadProducts();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Gerenciar de Produtos"),
@@ -26,17 +30,20 @@ class ProductManagementScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: productsData.itemsCount,
-          itemBuilder: (context, index) => Column(
-            children: [
-              ProductItem(
-                product: products[index],
-              ),
-              Divider(),
-            ],
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListView.builder(
+            itemCount: productsData.itemsCount,
+            itemBuilder: (context, index) => Column(
+              children: [
+                ProductItem(
+                  product: products[index],
+                ),
+                Divider(),
+              ],
+            ),
           ),
         ),
       ),
